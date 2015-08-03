@@ -36,10 +36,12 @@ class Satellite(object):
             poly_func = numpy.poly1d(numpy.polyfit(x, y, degree))
         return poly_func
 
-    def get_coordinate_at_time(self, time):
+    def get_coordinate_at_time(self, time, polynomial_degree=None):
         """ Returns Coordinate of a satellite at time,
         based on interpolation of observations.
         """
-        degree = len(self.observations) - 1
-        xyz = [self.get_ordinate_polynomial(ordinate, degree)(time) for ordinate in ['x', 'y', 'z']]
+        if not polynomial_degree:
+            polynomial_degree = len(self.observations) - 1
+        xyz = [self.get_ordinate_polynomial(ordinate, polynomial_degree)(time) 
+            for ordinate in ['x', 'y', 'z']]
         return Coordinate(x=xyz[0], y=xyz[1], z=xyz[2])
