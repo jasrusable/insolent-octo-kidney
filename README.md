@@ -1,2 +1,2 @@
-# insolent-octo-kidney
-Satellite ephemeris interpolator.
+# Satellite ephemeris interpolator
+Interpolates satellite ephemerisesesses using polynomial fitting.
