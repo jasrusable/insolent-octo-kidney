@@ -1,2 +1,2 @@
 # insolent-octo-kidney
-Satellite ephemeris approximator and interpolator.
+Satellite ephemeris interpolator.
