@@ -10,11 +10,14 @@ class Satellite(object):
     def __init__(self, id=None):
         self.id = id
         self.observations = []
+        self.poly_func_cache = None
 
     def __repr__(self):
         return 'Satellite(id={id})'.format(id=self.id)
 
     def add_observation(self, x, y, z, time):
+        # Invalidate poly_func cache
+        self.poly_func_cache = None
         self.observations.append(
             Observation(x, y, z, time)
         )
@@ -23,11 +26,15 @@ class Satellite(object):
         """ Returns a numpy.poly1d function with 
         y-axis as ordinate, and x-axis as time.
         """
-        x, y = [], []
-        for observation in self.observations:
-            x.append(observation.time)
-            y.append(getattr(observation.coordinate, ordinate))
-        return numpy.poly1d(numpy.polyfit(x, y, degree))
+        if self.poly_func_cache:
+            poly_func = self.poly_func_cache
+        else:
+            x, y = [], []
+            for observation in self.observations:
+                x.append(observation.time)
+                y.append(getattr(observation.coordinate, ordinate))
+            poly_func = numpy.poly1d(numpy.polyfit(x, y, degree))
+        return poly_func
 
     def get_coordinate_at_time(self, time):
         """ Returns Coordinate of a satellite at time,
